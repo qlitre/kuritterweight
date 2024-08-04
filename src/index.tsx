@@ -58,9 +58,11 @@ app.post("/api/webhook", async (c) => {
 
     let message = "";
     if (!isNaN(curWeight) && userId) {
+      
+      const tableName="DailyWeights"
       const sqlSelect = `
-      select weight from weights
-      where date = (select max(date) from weights where line_id=?);
+      select weight from ${tableName}
+      where date = (select max(date) from ${tableName} where line_id=?);
       `
       const result: Weights | null = await c.env.DB.prepare(sqlSelect).bind(userId).first();
       const recentWeight = result ? result.weight : null;
@@ -69,7 +71,7 @@ app.post("/api/webhook", async (c) => {
       //D1への保存
       const timestamp = getJSTFormattedTimestamp()
       await c.env.DB.prepare(
-        `insert into weights (line_id,date,weight) values (?, ?, ?)`
+        `insert into ${tableName} (line_id,date,weight) values (?, ?, ?)`
       )
         .bind(userId, timestamp, curWeight)
         .run();
