@@ -15,18 +15,6 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>()
 
-const getJSTTimestamp = () => {
-  const now = new Date();
-  const jstOffset = 9 * 60; // JST is UTC+9
-  const jstDate = new Date(now.getTime() + (jstOffset * 60 * 1000));
-  const year = jstDate.getUTCFullYear();
-  const month = String(jstDate.getUTCMonth() + 1).padStart(2, '0');
-  const date = String(jstDate.getUTCDate()).padStart(2, '0');
-  const hours = String(jstDate.getUTCHours()).padStart(2, '0');
-  const minutes = String(jstDate.getUTCMinutes()).padStart(2, '0');
-  return `${year}-${month}-${date} ${hours}:${minutes}`;
-};
-
 app.get('/', (c) => c.text('Hello Hono!'))
 
 app.post("/api/webhook", async (c) => {
