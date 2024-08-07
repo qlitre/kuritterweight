@@ -14,6 +14,7 @@ type Bindings = {
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
+const tableName = "DailyWeights"
 
 app.get('/', (c) => c.text('Hello Hono!'))
 
@@ -46,8 +47,6 @@ app.post("/api/webhook", async (c) => {
 
     let message = "";
     if (!isNaN(curWeight) && userId) {
-      
-      const tableName="DailyWeights"
       const sqlSelect = `
       select weight from ${tableName}
       where date = (select max(date) from ${tableName} where line_id=?);
@@ -56,18 +55,19 @@ app.post("/api/webhook", async (c) => {
       const recentWeight = result ? result.weight : null;
       if (!recentWeight) return c.json({ message: "ok" });
       message = buildMessage(recentWeight, curWeight);
-      //D1への保存
-      const timestamp = getJSTFormattedTimestamp()
-      await c.env.DB.prepare(
-        `insert into ${tableName} (line_id,date,weight) values (?, ?, ?)`
-      )
-        .bind(userId, timestamp, curWeight)
-        .run();
+
     } else {
       message = "体重データが不正です";
     }
 
     await textEventHandler(event, accessToken, message);
+    //D1への保存
+    const timestamp = getJSTFormattedTimestamp()
+    await c.env.DB.prepare(
+      `insert into ${tableName} (line_id,date,weight) values (?, ?, ?)`
+    )
+      .bind(userId, timestamp, curWeight)
+      .run();
     return c.json({ message: "ok" });
   } catch (err: unknown) {
     if (err instanceof Error) {
