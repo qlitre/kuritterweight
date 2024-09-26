@@ -55,11 +55,13 @@ app.post("/api/webhook", async (c) => {
       const recentWeight = result ? result.weight : null;
       if (!recentWeight) return c.json({ message: "ok" });
       message = buildMessage(recentWeight, curWeight);
-
     } else {
       message = "体重データが不正です";
+      await textEventHandler(event, accessToken, message);
+      return c.json({
+        status: "error",
+      });
     }
-
     await textEventHandler(event, accessToken, message);
     //D1への保存
     const timestamp = getJSTFormattedTimestamp()
