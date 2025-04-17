@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@line/bot-sdk": "^9.2.2",
-    "hono": "^4.6.17"
+    "hono": "^4.7.7"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240529.0",

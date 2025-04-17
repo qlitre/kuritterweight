@@ -708,10 +708,10 @@ hasown@^2.0.2:
   dependencies:
     function-bind "^1.1.2"
 
-hono@^4.6.17:
-  version "4.6.17"
-  resolved "https://registry.yarnpkg.com/hono/-/hono-4.6.17.tgz#143b9cba563caaf37584cecc25166c9450ea47cc"
-  integrity sha512-Kbh4M0so2RzLiIg6iP33DoTU68TdvP2O/kb1Hhhdwa37fazuf402ig8ZRfjkz2dqXwiWl2dAgh0f++TuKAdOtQ==
+hono@^4.7.7:
+  version "4.7.7"
+  resolved "https://registry.yarnpkg.com/hono/-/hono-4.7.7.tgz#ad01a92a2a1b03c608ef42153c85c99c05c03bfe"
+  integrity sha512-2PCpQRbN87Crty8/L/7akZN3UyZIAopSoRxCwRbJgUuV1+MHNFHzYFxZTg4v/03cXUm+jce/qa2VSBZpKBm3Qw==
 
 is-binary-path@~2.1.0:
   version "2.1.0"
