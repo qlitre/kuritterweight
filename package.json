@@ -6,7 +6,9 @@
     "build": "vite build",
     "preview": "$npm_execpath run build && vite preview",
     "deploy": "$npm_execpath run build && wrangler deploy",
-    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@line/bot-sdk": "^9.2.2",
@@ -15,6 +17,7 @@
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.2.3",
     "@cloudflare/workers-types": "^4.20250628.0",
+    "prettier": "^3.6.2",
     "vite": "^6.3.5",
     "vite-ssr-components": "^0.3.0",
     "wrangler": "^4.17.0"

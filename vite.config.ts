@@ -8,7 +8,7 @@ export default defineConfig({
     lib: {
       entry: './src/index.tsx',
       formats: ['es'],
-      fileName: 'index'
-    }
-  }
+      fileName: 'index',
+    },
+  },
 })
