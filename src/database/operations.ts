@@ -23,3 +23,17 @@ export const saveWeight = async (
     .bind(userId, timestamp, weight)
     .run();
 };
+
+export const getWeightHistory = async (
+  db: D1Database, 
+  days: number = 30
+): Promise<Weights[]> => {
+  const sqlSelect = `
+    SELECT id, line_id, date, weight
+    FROM ${tableName}
+    ORDER BY date DESC
+    LIMIT ?
+  `;
+  const results = await db.prepare(sqlSelect).bind(days).all();
+  return results.results as Weights[];
+};
