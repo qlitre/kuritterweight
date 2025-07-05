@@ -3,11 +3,8 @@ import { WebhookEvent } from '@line/bot-sdk'
 import { getLatestWeight, saveWeight, getWeightHistory } from './database/operations'
 import { textEventHandler, processWebhookEvents } from './line/handlers'
 import { buildMessage, getJSTFormattedTimestamp, parseWeightFromText } from './utils'
-
-type Bindings = {
-  CHANNEL_ACCESS_TOKEN: string
-  DB: D1Database
-}
+import { Bindings } from './types/types'
+import mcpApp from './mcp'
 
 const app = new Hono<{ Bindings: Bindings }>()
 
@@ -263,5 +260,7 @@ app.post('/api/webhook', async (c) => {
     })
   }
 })
+
+app.route('/mcp', mcpApp)
 
 export default app

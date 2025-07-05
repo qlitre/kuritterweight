@@ -1,4 +1,4 @@
-import { Weights } from '../types/tables'
+import { Weights } from '../types/types'
 
 const tableName = 'DailyWeights'
 
