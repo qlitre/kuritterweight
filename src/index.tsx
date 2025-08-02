@@ -239,6 +239,25 @@ app.post('/api/webhook', async (c) => {
       const recentWeight = await getLatestWeight(c.env.DB, userId)
       if (!recentWeight) return c.json({ message: 'ok' })
       message = buildMessage(recentWeight, curWeight)
+      
+      // データ保存を先に実行
+      const timestamp = getJSTFormattedTimestamp()
+      try {
+        await saveWeight(c.env.DB, userId, curWeight, timestamp)
+        console.log(`Weight saved successfully: userId=${userId}, weight=${curWeight}, timestamp=${timestamp}`)
+      } catch (saveError) {
+        console.error('Failed to save weight to database:', saveError)
+        throw saveError // 保存失敗時は処理を中断
+      }
+      
+      // 保存成功後にメッセージを送信
+      try {
+        await textEventHandler(event, accessToken, message)
+        console.log(`Message sent successfully to userId=${userId}`)
+      } catch (messageError) {
+        console.error('Failed to send LINE message:', messageError)
+        // メッセージ送信失敗でもデータは保存済みなので続行
+      }
     } else {
       message = '体重データが不正です'
       await textEventHandler(event, accessToken, message)
@@ -246,10 +265,6 @@ app.post('/api/webhook', async (c) => {
         status: 'error',
       })
     }
-    await textEventHandler(event, accessToken, message)
-    //D1への保存
-    const timestamp = getJSTFormattedTimestamp()
-    await saveWeight(c.env.DB, userId, curWeight, timestamp)
     return c.json({ message: 'ok' })
   } catch (err: unknown) {
     if (err instanceof Error) {
