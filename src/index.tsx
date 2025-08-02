@@ -1,6 +1,6 @@
 import { Hono } from 'hono'
 import { WebhookEvent } from '@line/bot-sdk'
-import { getLatestWeight, saveWeight, getWeightHistory } from './database/operations'
+import { getLatestWeight, saveWeight, getWeightHistory, deleteLatestWeight } from './database/operations'
 import { textEventHandler, processWebhookEvents } from './line/handlers'
 import { buildMessage, getJSTFormattedTimestamp, parseWeightFromText } from './utils'
 import { Bindings } from './types/types'
@@ -232,7 +232,31 @@ app.post('/api/webhook', async (c) => {
     const userId = event.source.userId
     // filterしている関係かやらないと型エラーが起きる
     if (event.message.type != 'text') return
-    const curWeight = parseWeightFromText(event.message.text) // 体重データのパース
+    
+    const messageText = event.message.text.trim()
+    
+    // 削除メッセージの処理
+    if (messageText === '削除' && userId) {
+      try {
+        const deleted = await deleteLatestWeight(c.env.DB, userId)
+        let deleteMessage = ''
+        if (deleted) {
+          deleteMessage = '最新の体重データを削除しました #kuritterweight'
+          console.log(`Weight deleted successfully for userId=${userId}`)
+        } else {
+          deleteMessage = '削除対象のデータが見つかりませんでした'
+        }
+        await textEventHandler(event, accessToken, deleteMessage)
+        return c.json({ message: 'ok' })
+      } catch (deleteError) {
+        console.error('Failed to delete weight data:', deleteError)
+        const errorMessage = '削除処理でエラーが発生しました'
+        await textEventHandler(event, accessToken, errorMessage)
+        return c.json({ status: 'error' })
+      }
+    }
+    
+    const curWeight = parseWeightFromText(messageText) // 体重データのパース
 
     let message = ''
     if (!isNaN(curWeight) && userId) {

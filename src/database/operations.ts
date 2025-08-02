@@ -25,6 +25,20 @@ export const saveWeight = async (
     .run()
 }
 
+export const deleteLatestWeight = async (db: D1Database, userId: string): Promise<boolean> => {
+  const sqlDelete = `
+    DELETE FROM ${tableName}
+    WHERE line_id = ? AND date = (
+      SELECT date FROM ${tableName}
+      WHERE line_id = ?
+      ORDER BY date DESC
+      LIMIT 1
+    );
+  `
+  const result = await db.prepare(sqlDelete).bind(userId, userId).run()
+  return (result.meta?.changes ?? 0) > 0
+}
+
 export const getWeightHistory = async (db: D1Database, days: number = 30): Promise<Weights[]> => {
   const sqlSelect = `
     SELECT id, line_id, date, weight
