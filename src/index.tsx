@@ -256,6 +256,38 @@ app.post('/api/webhook', async (c) => {
       }
     }
     
+    // 履歴メッセージの処理
+    if (messageText === '履歴' && userId) {
+      try {
+        const history = await getWeightHistory(c.env.DB, 5)
+        const userHistory = history.filter(record => record.line_id === userId)
+        
+        let historyMessage = ''
+        if (userHistory.length > 0) {
+          historyMessage = '📊 直近5件の体重履歴\n\n'
+          userHistory.forEach((record, index) => {
+            const date = new Date(record.date)
+            const formattedDate = date.toLocaleDateString('ja-JP', { 
+              month: 'numeric', 
+              day: 'numeric'
+            })
+            historyMessage += `${index + 1}. ${formattedDate}: ${record.weight}kg\n`
+          })
+          historyMessage += '\n#kuritterweight'
+        } else {
+          historyMessage = 'まだ体重データがありません'
+        }
+        
+        await textEventHandler(event, accessToken, historyMessage)
+        return c.json({ message: 'ok' })
+      } catch (historyError) {
+        console.error('Failed to get weight history:', historyError)
+        const errorMessage = '履歴取得でエラーが発生しました'
+        await textEventHandler(event, accessToken, errorMessage)
+        return c.json({ status: 'error' })
+      }
+    }
+    
     const curWeight = parseWeightFromText(messageText) // 体重データのパース
 
     let message = ''
