@@ -79,14 +79,14 @@ app.post('/api/webhook', async (c) => {
       try {
         const history = await getWeightHistory(c.env.DB, 5)
         const userHistory = history.filter(record => record.line_id === userId)
-        
+
         let historyMessage = ''
         if (userHistory.length > 0) {
           historyMessage = '📊 直近5件の体重履歴\n\n'
           userHistory.forEach((record, index) => {
             const date = new Date(record.date)
-            const formattedDate = date.toLocaleDateString('ja-JP', { 
-              month: 'numeric', 
+            const formattedDate = date.toLocaleDateString('ja-JP', {
+              month: 'numeric',
               day: 'numeric'
             })
             historyMessage += `${index + 1}. ${formattedDate}: ${record.weight}kg\n`
@@ -95,12 +95,40 @@ app.post('/api/webhook', async (c) => {
         } else {
           historyMessage = 'まだ体重データがありません'
         }
-        
+
         await textEventHandler(event, accessToken, historyMessage)
         return c.json({ message: 'ok' })
       } catch (historyError) {
         console.error('Failed to get weight history:', historyError)
         const errorMessage = '履歴取得でエラーが発生しました'
+        await textEventHandler(event, accessToken, errorMessage)
+        return c.json({ status: 'error' })
+      }
+    }
+
+    // 再送メッセージの処理
+    if (messageText === '再送' && userId) {
+      try {
+        const history = await getWeightHistory(c.env.DB, 2)
+        const userHistory = history.filter(record => record.line_id === userId)
+
+        let resendMessage = ''
+        if (userHistory.length >= 2) {
+          const latestWeight = userHistory[0].weight
+          const previousWeight = userHistory[1].weight
+          resendMessage = buildMessage(previousWeight, latestWeight)
+        } else if (userHistory.length === 1) {
+          const latestWeight = userHistory[0].weight
+          resendMessage = `${latestWeight}kg #kuritterweight`
+        } else {
+          resendMessage = 'まだ体重データがありません'
+        }
+
+        await textEventHandler(event, accessToken, resendMessage)
+        return c.json({ message: 'ok' })
+      } catch (resendError) {
+        console.error('Failed to resend weight data:', resendError)
+        const errorMessage = '再送処理でエラーが発生しました'
         await textEventHandler(event, accessToken, errorMessage)
         return c.json({ status: 'error' })
       }
