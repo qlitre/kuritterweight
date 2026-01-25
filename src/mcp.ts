@@ -11,24 +11,35 @@ export const getMcpServer = async (c: Context<{ Bindings: Bindings }>) => {
     name: 'kuritterweight-mcp',
     version: '0.0.1',
   })
-  server.tool('getRecentWeight', 'Get kuri_tter recent weight', {}, async () => {
-    const result = await c.env.DB.prepare(
-      'SELECT * FROM DailyWeights ORDER BY date DESC Limit 7'
-    ).all()
-    return {
-      content: [
-        {
-          type: 'text',
-          text: JSON.stringify(result),
-        },
-      ],
-    }
-  })
-  server.tool(
-    'getMonthlyAverageWeight',
-    'Get average weight for each month',
+  server.registerTool(
+    'getRecentWeight',
     {
-      months: z.number().int().positive().max(60).optional(),
+      title: 'Get kuri_tter recent weight',
+      description: 'Get kuri_tter recent weight',
+      inputSchema: {},
+    },
+    async () => {
+      const result = await c.env.DB.prepare(
+        'SELECT * FROM DailyWeights ORDER BY date DESC Limit 7'
+      ).all()
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify(result),
+          },
+        ],
+      }
+    }
+  )
+  server.registerTool(
+    'getMonthlyAverageWeight',
+    {
+      title: 'Get average weight for each month',
+      description: 'Get average weight for each month',
+      inputSchema: {
+        months: z.number().int().positive().max(60).optional(),
+      },
     },
     async ({ months }) => {
       const sql = `

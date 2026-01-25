@@ -12,7 +12,7 @@ const app = new Hono<{ Bindings: Bindings }>()
 app.get('/', (c) => {
   return c.html(WeightChartPage())
 })
-
+  
 app.get('/api/weight-history', async (c) => {
   if (!c.env) {
     console.error('Environment variables are not available')

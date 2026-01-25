@@ -11,9 +11,9 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
-    "@hono/mcp": "^0.1.0",
+    "@hono/mcp": "^0.2.3",
     "@line/bot-sdk": "^9.2.2",
-    "@modelcontextprotocol/sdk": "^1.15.0",
+    "@modelcontextprotocol/sdk": "^1.25.3",
     "hono": "^4.11.5"
   },
   "devDependencies": {
