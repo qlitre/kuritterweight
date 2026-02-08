@@ -17,7 +17,7 @@
     "@modelcontextprotocol/ext-apps": "^1.0.1",
     "@modelcontextprotocol/sdk": "^1.25.3",
     "chart.js": "^4.5.1",
-    "hono": "^4.11.8",
+    "hono": "^4.11.9",
     "hono-rate-limiter": "^0.5.3"
   },
   "devDependencies": {
