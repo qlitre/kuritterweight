@@ -86,20 +86,20 @@
   resolved "https://registry.npmjs.org/@cloudflare/unenv-preset/-/unenv-preset-2.3.3.tgz"
   integrity sha512-/M3MEcj3V2WHIRSW1eAQBPRJ6JnGQHc6JKMAPLkDb7pLs3m6X9ES/+K3ceGqxI6TKeF32AWAi7ls0AYzVxCP0A==
 
-"@cloudflare/vite-plugin@^1.2.3":
-  version "1.7.5"
-  resolved "https://registry.npmjs.org/@cloudflare/vite-plugin/-/vite-plugin-1.7.5.tgz"
-  integrity sha512-jQTTEV50YTFVK/1CUe1Mg2CvS01uZDWOn6f2fBU3+MQwwaBu6gjSttGCrccJuUNQzXfO4rhRlm0Mb4+fwEfQjw==
+"@cloudflare/vite-plugin@^1.9.0":
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@cloudflare/vite-plugin/-/vite-plugin-1.9.0.tgz#f2966d1a715a3ce703c85c824f236a8dda9d537f"
+  integrity sha512-YYmWZklDPF7Ay97JX51bZzKGNP7Z6Sme0+Pje1g5Jr7M6oU6L3NmmvIi8VKFLM48FRlSpXRmTF1tULJng6d6vg==
   dependencies:
     "@cloudflare/unenv-preset" "2.3.3"
     "@mjackson/node-fetch-server" "^0.6.1"
     "@rollup/plugin-replace" "^6.0.1"
     get-port "^7.1.0"
-    miniflare "4.20250617.4"
+    miniflare "4.20250617.5"
     picocolors "^1.1.1"
     tinyglobby "^0.2.12"
     unenv "2.0.0-rc.17"
-    wrangler "4.21.1"
+    wrangler "4.23.0"
     ws "8.18.0"
 
 "@cloudflare/workerd-darwin-64@1.20250617.0":
@@ -1507,10 +1507,10 @@ mime@^3.0.0:
   resolved "https://registry.npmjs.org/mime/-/mime-3.0.0.tgz"
   integrity sha512-jSCU7/VB1loIWBZe14aEYHU/+1UMEHoaO7qxCOVJOw9GgH72VAWppxNcjU+x9a2k3GSIBXNKxXQFqRvvZ7vr3A==
 
-miniflare@4.20250617.4:
-  version "4.20250617.4"
-  resolved "https://registry.npmjs.org/miniflare/-/miniflare-4.20250617.4.tgz"
-  integrity sha512-IAoApFKxOJlaaFkym5ETstVX3qWzVt3xyqCDj6vSSTgEH3zxZJ5417jZGg8iQfMHosKCcQH1doPPqqnOZm/yrw==
+miniflare@4.20250617.5:
+  version "4.20250617.5"
+  resolved "https://registry.yarnpkg.com/miniflare/-/miniflare-4.20250617.5.tgz#ea6143de800d37949ba80078de3569afba48c331"
+  integrity sha512-Qqn30jR6dCjXaKVizT6vH4KOb+GyLccoxLNOJEfu63yBPn8eoXa7PrdiSGTmjs2RY8/tr7eTO8Wu/Yr14k0xVA==
   dependencies:
     "@cspotcode/source-map-support" "0.8.1"
     acorn "8.14.0"
@@ -2011,32 +2011,16 @@ workerd@1.20250617.0:
     "@cloudflare/workerd-linux-arm64" "1.20250617.0"
     "@cloudflare/workerd-windows-64" "1.20250617.0"
 
-wrangler@4.21.1:
-  version "4.21.1"
-  resolved "https://registry.npmjs.org/wrangler/-/wrangler-4.21.1.tgz"
-  integrity sha512-tDszonELO8uhw3nF0ZKQnVcy9cx8zVSB9iT4v3/gsaYoARelRrytR7cfR1gj/fpPV4kEGM854md6rpxTInsyZw==
+wrangler@4.23.0, wrangler@^4.17.0:
+  version "4.23.0"
+  resolved "https://registry.yarnpkg.com/wrangler/-/wrangler-4.23.0.tgz#67bd967b6aebf734f2e3b6b9fdfe3e88935cbb34"
+  integrity sha512-JSeDt3IwA4TEmg/V3tRblImPjdxynBt9PUVO/acQJ83XGlMMSwswDKL1FuwvbFzgX6+JXc3GMHeu7r8AQIxw9w==
   dependencies:
     "@cloudflare/kv-asset-handler" "0.4.0"
     "@cloudflare/unenv-preset" "2.3.3"
     blake3-wasm "2.1.5"
     esbuild "0.25.4"
-    miniflare "4.20250617.4"
-    path-to-regexp "6.3.0"
-    unenv "2.0.0-rc.17"
-    workerd "1.20250617.0"
-  optionalDependencies:
-    fsevents "~2.3.2"
-
-wrangler@^4.17.0:
-  version "4.22.0"
-  resolved "https://registry.npmjs.org/wrangler/-/wrangler-4.22.0.tgz"
-  integrity sha512-m8qVO3YxhUTII+4U889G/f5UuLSvMkUkCNatupV2f/SJ+iqaWtP1QbuQII8bs2J/O4rqxsz46Wu2S50u7tKB5Q==
-  dependencies:
-    "@cloudflare/kv-asset-handler" "0.4.0"
-    "@cloudflare/unenv-preset" "2.3.3"
-    blake3-wasm "2.1.5"
-    esbuild "0.25.4"
-    miniflare "4.20250617.4"
+    miniflare "4.20250617.5"
     path-to-regexp "6.3.0"
     unenv "2.0.0-rc.17"
     workerd "1.20250617.0"
