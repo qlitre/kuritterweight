@@ -1233,10 +1233,10 @@ hasown@^2.0.2:
   dependencies:
     function-bind "^1.1.2"
 
-hono@^4.11.5:
-  version "4.11.5"
-  resolved "https://registry.yarnpkg.com/hono/-/hono-4.11.5.tgz#22dce7bb4ef589f3ece357affabd422fee898d0e"
-  integrity sha512-WemPi9/WfyMwZs+ZUXdiwcCh9Y+m7L+8vki9MzDw3jJ+W9Lc+12HGsd368Qc1vZi1xwW8BWMMsnK5efYKPdt4g==
+hono@^4.11.8:
+  version "4.11.8"
+  resolved "https://registry.yarnpkg.com/hono/-/hono-4.11.8.tgz#5a056734a75ea3cad86b4d1a6f7e562a214e68e9"
+  integrity sha512-eVkB/CYCCei7K2WElZW9yYQFWssG0DhaDhVvr7wy5jJ22K+ck8fWW0EsLpB0sITUTvPnc97+rrbQqIr5iqiy9Q==
 
 http-errors@2.0.0, http-errors@^2.0.0:
   version "2.0.0"
