@@ -2,8 +2,9 @@
   "name": "kuritterweight-line-bot",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "$npm_execpath run build:mcp-app && vite",
+    "build:mcp-app": "vite build -c vite.mcp-app.config.ts",
+    "build": "$npm_execpath run build:mcp-app && vite build",
     "preview": "$npm_execpath run build && vite preview",
     "deploy": "$npm_execpath run build && wrangler deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings",
@@ -11,9 +12,11 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
-    "@hono/mcp": "^0.2.3",
+    "@cfworker/json-schema": "^4.1.1",
     "@line/bot-sdk": "^9.2.2",
+    "@modelcontextprotocol/ext-apps": "^1.0.1",
     "@modelcontextprotocol/sdk": "^1.25.3",
+    "chart.js": "^4.5.1",
     "hono": "^4.11.8",
     "hono-rate-limiter": "^0.5.3"
   },
@@ -22,6 +25,7 @@
     "@cloudflare/workers-types": "^4.20250628.0",
     "prettier": "^3.6.2",
     "vite": "^6.3.5",
+    "vite-plugin-singlefile": "^2.3.0",
     "vite-ssr-components": "^0.3.0",
     "wrangler": "^4.17.0"
   }

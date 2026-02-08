@@ -20,6 +20,14 @@
 2. **getMonthlyAverageWeight** - 月別の平均体重を取得
    - オプションで取得する月数を指定可能（最大60ヶ月）
 
+### MCP Apps
+
+各ツールにはインタラクティブなUIが紐付いており、MCP Apps対応クライアントでは体重データをテーブル形式で表示できる。
+
+- `@modelcontextprotocol/ext-apps` を使用
+- UIは `vite-plugin-singlefile` で単一HTMLにバンドル
+- クライアント側から `App.callServerTool()` でデータを取得・表示
+
 ### 使用方法
 
 MCPクライアントから以下の設定で接続。
@@ -37,4 +45,12 @@ MCPクライアントから以下の設定で接続。
     }
   }
 }
+```
+
+## 開発
+
+```bash
+yarn dev          # 開発サーバー起動
+yarn build        # プロダクションビルド（MCP App + Worker）
+yarn deploy       # ビルド＆デプロイ
 ```

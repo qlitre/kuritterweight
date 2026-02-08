@@ -1,5 +1,6 @@
 # prod
 dist/
+dist-mcp-app/
 
 # dev
 .yarn/
