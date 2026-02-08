@@ -27,6 +27,6 @@
     "vite": "^6.3.5",
     "vite-plugin-singlefile": "^2.3.0",
     "vite-ssr-components": "^0.5.2",
-    "wrangler": "^4.17.0"
+    "wrangler": "^4.63.0"
   }
 }
