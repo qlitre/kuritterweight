@@ -14,7 +14,8 @@
     "@hono/mcp": "^0.2.3",
     "@line/bot-sdk": "^9.2.2",
     "@modelcontextprotocol/sdk": "^1.25.3",
-    "hono": "^4.11.8"
+    "hono": "^4.11.8",
+    "hono-rate-limiter": "^0.5.3"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.2.3",
