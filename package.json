@@ -14,7 +14,7 @@
   "dependencies": {
     "@cfworker/json-schema": "^4.1.1",
     "@line/bot-sdk": "^10.6.0",
-    "@modelcontextprotocol/ext-apps": "^1.0.1",
+    "@modelcontextprotocol/ext-apps": "^1.1.2",
     "@modelcontextprotocol/sdk": "^1.27.1",
     "chart.js": "^4.5.1",
     "hono": "^4.12.3",

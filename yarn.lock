@@ -759,10 +759,10 @@
   optionalDependencies:
     axios "^1.7.4"
 
-"@modelcontextprotocol/ext-apps@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@modelcontextprotocol/ext-apps/-/ext-apps-1.0.1.tgz#2fb809ac4582b6f5410a19f6aa9cfa73661202a9"
-  integrity sha512-rAPzBbB5GNgYk216paQjGKUgbNXSy/yeR95c0ni6Y4uvhWI2AeF+ztEOqQFLBMQy/MPM+02pbVK1HaQmQjMwYQ==
+"@modelcontextprotocol/ext-apps@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@modelcontextprotocol/ext-apps/-/ext-apps-1.1.2.tgz#e1845edf7b0338ba3c133442aa38af03836a34e4"
+  integrity sha512-Gx4TEo3/F8yq1Ix6LdgLwMrKqfZqD7++eakZdbMUewrYtHeeJn3nKpeNhgEfO7nYRwonqWYomOAszWZWJS0IbA==
   optionalDependencies:
     "@oven/bun-darwin-aarch64" "^1.2.21"
     "@oven/bun-darwin-x64" "^1.2.21"
