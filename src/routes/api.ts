@@ -16,7 +16,7 @@ const ErrorSchema = z.object({
 
 const WeightHistoryRoute = createRoute({
   method: 'get',
-  path: '/weight-history',
+  path: '/api/weight-history',
   responses: {
     200: {
       description: '直近30日の体重履歴',
