@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.23.1",
-    "@cloudflare/workers-types": "^4.20250628.0",
+    "@cloudflare/workers-types": "^4.20260317.1",
     "prettier": "^3.8.1",
     "vite": "^7.3.1",
     "vite-plugin-singlefile": "^2.3.0",
