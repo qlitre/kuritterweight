@@ -32,13 +32,13 @@ export const getJSTFormattedTimestamp = (): string => {
 export const parseWeightFromText = (text: string): number => {
   // 数値のみかどうかをチェック（整数または小数）
   const numericPattern = /^\d+(\.\d+)?$/
-  
+
   if (numericPattern.test(text.trim())) {
     const weightValue = parseFloat(text.trim())
     if (weightValue >= 20 && weightValue <= 100) {
       return weightValue
     }
   }
-  
+
   return NaN
 }

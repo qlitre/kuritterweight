@@ -1,18 +1,25 @@
 import { Hono } from 'hono'
 import { WebhookEvent } from '@line/bot-sdk'
-import { getLatestWeight, saveWeight, getWeightHistory, deleteLatestWeight } from './database/operations'
+import {
+  getLatestWeight,
+  saveWeight,
+  getWeightHistory,
+  deleteLatestWeight,
+} from './database/operations'
 import { textEventHandler, processWebhookEvents } from './line/handlers'
 import { buildMessage, getJSTFormattedTimestamp, parseWeightFromText } from './utils'
 import { Bindings } from './types/types'
 import { WeightChartPage } from './components/WeightChartPage'
 import mcpApp from './mcp'
+import { swaggerUI } from '@hono/swagger-ui'
+import apiApp from './routes/api'
 
 const app = new Hono<{ Bindings: Bindings }>()
 
 app.get('/', (c) => {
   return c.html(WeightChartPage())
 })
-  
+
 app.get('/api/weight-history', async (c) => {
   if (!c.env) {
     console.error('Environment variables are not available')
@@ -50,9 +57,9 @@ app.post('/api/webhook', async (c) => {
     const userId = event.source.userId
     // filterしている関係かやらないと型エラーが起きる
     if (event.message.type != 'text') return
-    
+
     const messageText = event.message.text.trim()
-    
+
     // 削除メッセージの処理
     if (messageText === '削除' && userId) {
       try {
@@ -73,12 +80,12 @@ app.post('/api/webhook', async (c) => {
         return c.json({ status: 'error' })
       }
     }
-    
+
     // 履歴メッセージの処理
     if (messageText === '履歴' && userId) {
       try {
         const history = await getWeightHistory(c.env.DB, 5)
-        const userHistory = history.filter(record => record.line_id === userId)
+        const userHistory = history.filter((record) => record.line_id === userId)
 
         let historyMessage = ''
         if (userHistory.length > 0) {
@@ -87,7 +94,7 @@ app.post('/api/webhook', async (c) => {
             const date = new Date(record.date)
             const formattedDate = date.toLocaleDateString('ja-JP', {
               month: 'numeric',
-              day: 'numeric'
+              day: 'numeric',
             })
             historyMessage += `${index + 1}. ${formattedDate}: ${record.weight}kg\n`
           })
@@ -110,7 +117,7 @@ app.post('/api/webhook', async (c) => {
     if (messageText === '再送' && userId) {
       try {
         const history = await getWeightHistory(c.env.DB, 2)
-        const userHistory = history.filter(record => record.line_id === userId)
+        const userHistory = history.filter((record) => record.line_id === userId)
 
         let resendMessage = ''
         if (userHistory.length >= 2) {
@@ -133,7 +140,7 @@ app.post('/api/webhook', async (c) => {
         return c.json({ status: 'error' })
       }
     }
-    
+
     const curWeight = parseWeightFromText(messageText) // 体重データのパース
 
     let message = ''
@@ -141,17 +148,19 @@ app.post('/api/webhook', async (c) => {
       const recentWeight = await getLatestWeight(c.env.DB, userId)
       if (!recentWeight) return c.json({ message: 'ok' })
       message = buildMessage(recentWeight, curWeight)
-      
+
       // データ保存を先に実行
       const timestamp = getJSTFormattedTimestamp()
       try {
         await saveWeight(c.env.DB, userId, curWeight, timestamp)
-        console.log(`Weight saved successfully: userId=${userId}, weight=${curWeight}, timestamp=${timestamp}`)
+        console.log(
+          `Weight saved successfully: userId=${userId}, weight=${curWeight}, timestamp=${timestamp}`
+        )
       } catch (saveError) {
         console.error('Failed to save weight to database:', saveError)
         throw saveError // 保存失敗時は処理を中断
       }
-      
+
       // 保存成功後にメッセージを送信
       try {
         await textEventHandler(event, accessToken, message)
@@ -178,6 +187,19 @@ app.post('/api/webhook', async (c) => {
   }
 })
 
+app.route('/api', apiApp)
+app.get('/ui', swaggerUI({ url: '/doc' }))
+app.get('/doc', (c) => {
+  return c.json(
+    apiApp.getOpenAPI31Document({
+      openapi: '3.1.0',
+      info: {
+        title: 'Kuritterweight API',
+        version: '1.0.0',
+      },
+    })
+  )
+})
 app.route('/mcp', mcpApp)
 
 export default app

@@ -1,12 +1,17 @@
 import { WebStandardStreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
-import { registerAppTool, registerAppResource, RESOURCE_MIME_TYPE } from '@modelcontextprotocol/ext-apps/server'
+import {
+  registerAppTool,
+  registerAppResource,
+  RESOURCE_MIME_TYPE,
+} from '@modelcontextprotocol/ext-apps/server'
 import { z } from 'zod'
 import { Context } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { Hono } from 'hono'
 import { Bindings } from './types/types'
 import html from '../dist-mcp-app/index.html?raw'
+import { getWeightHistory } from './database/operations'
 
 const resourceUri = 'ui://kuritterweight'
 
@@ -15,6 +20,8 @@ export const getMcpServer = async (c: Context<{ Bindings: Bindings }>) => {
     name: 'kuritterweight-mcp',
     version: '0.0.1',
   })
+
+  const db = c.env.DB
 
   registerAppTool(
     server,
@@ -26,9 +33,7 @@ export const getMcpServer = async (c: Context<{ Bindings: Bindings }>) => {
       _meta: { ui: { resourceUri } },
     },
     async () => {
-      const result = await c.env.DB.prepare(
-        'SELECT * FROM DailyWeights ORDER BY date DESC Limit 7'
-      ).all()
+      const result = await getWeightHistory(db, 7)
       return {
         content: [
           {
@@ -108,11 +113,17 @@ export const getMcpServer = async (c: Context<{ Bindings: Bindings }>) => {
     }
   )
 
-  registerAppResource(server, resourceUri, resourceUri, { mimeType: RESOURCE_MIME_TYPE }, async () => {
-    return {
-      contents: [{ uri: resourceUri, mimeType: RESOURCE_MIME_TYPE, text: html }],
+  registerAppResource(
+    server,
+    resourceUri,
+    resourceUri,
+    { mimeType: RESOURCE_MIME_TYPE },
+    async () => {
+      return {
+        contents: [{ uri: resourceUri, mimeType: RESOURCE_MIME_TYPE, text: html }],
+      }
     }
-  })
+  )
 
   return server
 }

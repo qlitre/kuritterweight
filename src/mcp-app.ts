@@ -2,9 +2,26 @@
 /// <reference lib="dom.iterable" />
 
 import { App } from '@modelcontextprotocol/ext-apps'
-import { Chart, LineController, LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Filler } from 'chart.js'
+import {
+  Chart,
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  Tooltip,
+  Filler,
+} from 'chart.js'
 
-Chart.register(LineController, LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Filler)
+Chart.register(
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  Tooltip,
+  Filler
+)
 
 const recentDataEl = document.getElementById('recent-data')!
 const monthlyDataEl = document.getElementById('monthly-data')!
@@ -143,7 +160,10 @@ btnRecent.addEventListener('click', async () => {
 btnMonthly.addEventListener('click', async () => {
   monthlyDataEl.innerHTML = '<span class="loading">Loading...</span>'
   try {
-    const result = await app.callServerTool({ name: 'getMonthlyAverageWeight', arguments: { months: 6 } })
+    const result = await app.callServerTool({
+      name: 'getMonthlyAverageWeight',
+      arguments: { months: 6 },
+    })
     const data = parseToolResult(result)
     monthlyDataEl.innerHTML = renderMonthlyTable(data as MonthlyRecord[])
   } catch (e) {

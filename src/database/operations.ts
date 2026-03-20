@@ -41,7 +41,7 @@ export const deleteLatestWeight = async (db: D1Database, userId: string): Promis
 
 export const getWeightHistory = async (db: D1Database, days: number = 30): Promise<Weights[]> => {
   const sqlSelect = `
-    SELECT id, line_id, date, weight
+    SELECT id, date, weight
     FROM ${tableName}
     ORDER BY date DESC
     LIMIT ?

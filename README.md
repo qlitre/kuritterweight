@@ -37,11 +37,7 @@ MCPクライアントから以下の設定で接続。
   "mcpServers": {
     "kuritterweight-mcp": {
       "command": "npx",
-      "args": [
-        "-y",
-        "mcp-remote@latest",
-        "https://kuritterweight.qlitre.workers.dev/mcp"
-      ]
+      "args": ["-y", "mcp-remote@latest", "https://kuritterweight.qlitre.workers.dev/mcp"]
     }
   }
 }
