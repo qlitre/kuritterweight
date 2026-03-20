@@ -8,4 +8,5 @@ export type Weights = {
 export type Bindings = {
   CHANNEL_ACCESS_TOKEN: string
   DB: D1Database
+  USERID: string
 }

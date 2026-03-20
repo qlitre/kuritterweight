@@ -51,10 +51,14 @@ app.post('/api/webhook', async (c) => {
     console.log(`No event: ${events}`)
     return c.json({ message: 'ok' })
   }
+  const userId = event.source.userId
+  if (userId != c.env.USERID) {
+    console.log(`Unauthorized userId: ${userId}`)
+    return c.json({ message: 'ok' })
+  }
 
   const accessToken: string = c.env.CHANNEL_ACCESS_TOKEN
   try {
-    const userId = event.source.userId
     // filterしている関係かやらないと型エラーが起きる
     if (event.message.type != 'text') return
 
@@ -85,12 +89,11 @@ app.post('/api/webhook', async (c) => {
     if (messageText === '履歴' && userId) {
       try {
         const history = await getWeightHistory(c.env.DB, 5)
-        const userHistory = history.filter((record) => record.line_id === userId)
 
         let historyMessage = ''
-        if (userHistory.length > 0) {
+        if (history.length > 0) {
           historyMessage = '📊 直近5件の体重履歴\n\n'
-          userHistory.forEach((record, index) => {
+          history.forEach((record, index) => {
             const date = new Date(record.date)
             const formattedDate = date.toLocaleDateString('ja-JP', {
               month: 'numeric',
@@ -117,15 +120,14 @@ app.post('/api/webhook', async (c) => {
     if (messageText === '再送' && userId) {
       try {
         const history = await getWeightHistory(c.env.DB, 2)
-        const userHistory = history.filter((record) => record.line_id === userId)
 
         let resendMessage = ''
-        if (userHistory.length >= 2) {
-          const latestWeight = userHistory[0].weight
-          const previousWeight = userHistory[1].weight
+        if (history.length >= 2) {
+          const latestWeight = history[0].weight
+          const previousWeight = history[1].weight
           resendMessage = buildMessage(previousWeight, latestWeight)
-        } else if (userHistory.length === 1) {
-          const latestWeight = userHistory[0].weight
+        } else if (history.length === 1) {
+          const latestWeight = history[0].weight
           resendMessage = `${latestWeight}kg #kuritterweight`
         } else {
           resendMessage = 'まだ体重データがありません'
