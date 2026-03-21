@@ -171,6 +171,7 @@ app.get('/doc', (c) => {
         title: 'Kuritterweight API',
         version: '1.0.0',
       },
+      servers: [{ url: '/api' }],
     })
   )
 })
