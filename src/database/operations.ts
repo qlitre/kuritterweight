@@ -2,17 +2,6 @@ import { Weights } from '../types/types'
 
 const tableName = 'DailyWeights'
 
-export const getLatestWeight = async (db: D1Database, userId: string): Promise<number | null> => {
-  const sqlSelect = `
-    SELECT weight FROM ${tableName}
-    WHERE line_id = ?
-    ORDER BY date DESC
-    LIMIT 1;
-  `
-  const result: Weights | null = await db.prepare(sqlSelect).bind(userId).first()
-  return result ? result.weight : null
-}
-
 export const saveWeight = async (
   db: D1Database,
   userId: string,

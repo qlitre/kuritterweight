@@ -1,11 +1,6 @@
 import { Hono } from 'hono'
 import { WebhookEvent } from '@line/bot-sdk'
-import {
-  getLatestWeight,
-  saveWeight,
-  getWeightHistory,
-  deleteLatestWeight,
-} from './database/operations'
+import { saveWeight, deleteLatestWeight, getWeightHistory } from './database/operations'
 import { textEventHandler, processWebhookEvents } from './line/handlers'
 import { buildMessage, getJSTFormattedTimestamp, parseWeightFromText } from './utils'
 import { Bindings } from './types/types'
@@ -20,23 +15,6 @@ app.get('/', (c) => {
   return c.html(WeightChartPage())
 })
 
-app.get('/api/weight-history', async (c) => {
-  if (!c.env) {
-    console.error('Environment variables are not available')
-    return c.json({ error: 'Environment configuration error' }, 500)
-  }
-
-  try {
-    const weightHistory = await getWeightHistory(c.env.DB, 30)
-    return c.json(weightHistory)
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      console.error('Error fetching weight history:', err)
-    }
-    return c.json({ error: 'Failed to fetch weight history' }, 500)
-  }
-})
-
 app.post('/api/webhook', async (c) => {
   if (!c.env) {
     console.error('Environment variables are not available')
@@ -48,12 +26,10 @@ app.post('/api/webhook', async (c) => {
 
   const event = processWebhookEvents(events)
   if (!event) {
-    console.log(`No event: ${events}`)
     return c.json({ message: 'ok' })
   }
   const userId = event.source.userId
   if (userId != c.env.USERID) {
-    console.log(`Unauthorized userId: ${userId}`)
     return c.json({ message: 'ok' })
   }
 
@@ -71,7 +47,6 @@ app.post('/api/webhook', async (c) => {
         let deleteMessage = ''
         if (deleted) {
           deleteMessage = '最新の体重データを削除しました #kuritterweight'
-          console.log(`Weight deleted successfully for userId=${userId}`)
         } else {
           deleteMessage = '削除対象のデータが見つかりませんでした'
         }
@@ -147,7 +122,8 @@ app.post('/api/webhook', async (c) => {
 
     let message = ''
     if (!isNaN(curWeight) && userId) {
-      const recentWeight = await getLatestWeight(c.env.DB, userId)
+      const history = await getWeightHistory(c.env.DB, 1)
+      const recentWeight = history[0]?.weight ?? null
       if (!recentWeight) return c.json({ message: 'ok' })
       message = buildMessage(recentWeight, curWeight)
 
@@ -155,9 +131,6 @@ app.post('/api/webhook', async (c) => {
       const timestamp = getJSTFormattedTimestamp()
       try {
         await saveWeight(c.env.DB, userId, curWeight, timestamp)
-        console.log(
-          `Weight saved successfully: userId=${userId}, weight=${curWeight}, timestamp=${timestamp}`
-        )
       } catch (saveError) {
         console.error('Failed to save weight to database:', saveError)
         throw saveError // 保存失敗時は処理を中断
@@ -166,7 +139,6 @@ app.post('/api/webhook', async (c) => {
       // 保存成功後にメッセージを送信
       try {
         await textEventHandler(event, accessToken, message)
-        console.log(`Message sent successfully to userId=${userId}`)
       } catch (messageError) {
         console.error('Failed to send LINE message:', messageError)
         // メッセージ送信失敗でもデータは保存済みなので続行
