@@ -17,9 +17,25 @@ const ErrorSchema = z.object({
 const WeightHistoryRoute = createRoute({
   method: 'get',
   path: '/weight-history',
+  request: {
+    query: z.object({
+      days: z.coerce.number().int().positive().max(365).optional().default(30).openapi({
+        example: 30,
+        description: '取得件数',
+      }),
+      dateFrom: z.string().optional().openapi({
+        example: '2026-03-01',
+        description: '開始日 (YYYY-MM-DD)',
+      }),
+      dateTo: z.string().optional().openapi({
+        example: '2026-03-21',
+        description: '終了日 (YYYY-MM-DD)',
+      }),
+    }),
+  },
   responses: {
     200: {
-      description: '直近30日の体重履歴',
+      description: '体重履歴',
       content: {
         'application/json': {
           schema: z.array(WeightSchema),
@@ -40,7 +56,8 @@ const WeightHistoryRoute = createRoute({
 const app = new OpenAPIHono<{ Bindings: Bindings }>()
 app.openapi(WeightHistoryRoute, async (c) => {
   try {
-    const weightHistory = await getWeightHistory(c.env.DB, 30)
+    const { days, dateFrom, dateTo } = c.req.valid('query')
+    const weightHistory = await getWeightHistory(c.env.DB, days, dateFrom, dateTo)
     return c.json(weightHistory, 200)
   } catch (err) {
     console.error('Error fetching weight history:', err)
