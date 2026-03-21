@@ -1,11 +1,16 @@
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
-import { Bindings, Weights } from '../types/types'
-import { getWeightHistory } from '../database/operations'
+import { Bindings } from '../types/types'
+import { getWeightHistory, getMonthlyAverageWeight } from '../database/operations'
 
 const WeightSchema = z.object({
   id: z.number().openapi({ example: 1 }),
   date: z.string().openapi({ example: '2026-03-20 09:00' }),
   weight: z.number().openapi({ example: 65.5 }),
+})
+
+const MonthlyAverageWeightSchema = z.object({
+  month: z.string().openapi({ example: '2026-03' }),
+  avg_weight: z.number().openapi({ example: 65.5 }),
 })
 
 const ErrorSchema = z.object({
@@ -53,12 +58,58 @@ const WeightHistoryRoute = createRoute({
   },
 })
 
+const MonthlyAverageWeightRoute = createRoute({
+  method: 'get',
+  path: '/monthly-average-weight',
+  request: {
+    query: z.object({
+      months: z.coerce.number().int().min(1).max(36).openapi({
+        example: 12,
+        description: '取得月数',
+      }),
+    }),
+  },
+  responses: {
+    200: {
+      description: '月別平均体重',
+      content: {
+        'application/json': {
+          schema: z.array(MonthlyAverageWeightSchema),
+        },
+      },
+    },
+    500: {
+      description: 'サーバーエラー',
+      content: {
+        'application/json': {
+          schema: ErrorSchema,
+        },
+      },
+    },
+  },
+})
+
 const app = new OpenAPIHono<{ Bindings: Bindings }>()
 app.openapi(WeightHistoryRoute, async (c) => {
   try {
     const { days, dateFrom, dateTo } = c.req.valid('query')
     const weightHistory = await getWeightHistory(c.env.DB, days, dateFrom, dateTo)
     return c.json(weightHistory, 200)
+  } catch (err) {
+    console.error('Error fetching weight history:', err)
+    return c.json(
+      {
+        error: 'Failed to fetch weight history',
+      },
+      500
+    )
+  }
+})
+app.openapi(MonthlyAverageWeightRoute, async (c) => {
+  try {
+    const { months } = c.req.valid('query')
+    const monthlyAverageWeight = await getMonthlyAverageWeight(c.env.DB, months)
+    return c.json(monthlyAverageWeight, 200)
   } catch (err) {
     console.error('Error fetching weight history:', err)
     return c.json(

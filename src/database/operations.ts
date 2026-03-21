@@ -65,7 +65,7 @@ export const getWeightHistory = async (
 
 export const getMonthlyAverageWeight = async (
   db: D1Database,
-  months?: number
+  months: number = 1
 ): Promise<{ month: string; avg_weight: number }[]> => {
   const sql = `
     SELECT
@@ -74,7 +74,7 @@ export const getMonthlyAverageWeight = async (
     FROM ${tableName}
     GROUP BY month
     ORDER BY month DESC
-    ${months ? 'LIMIT ?' : ''}
+    LIMIT ?
   `
   const { results } = await db
     .prepare(sql)

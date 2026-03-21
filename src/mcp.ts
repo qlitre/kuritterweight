@@ -52,7 +52,7 @@ export const getMcpServer = async (c: Context<{ Bindings: Bindings }>) => {
       title: 'Get average weight for each month',
       description: 'Get average weight for each month',
       inputSchema: {
-        months: z.number().int().positive().max(60).optional(),
+        months: z.number().int().positive().max(36).optional(),
       },
       _meta: { ui: { resourceUri } },
     },
