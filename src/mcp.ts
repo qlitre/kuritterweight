@@ -11,7 +11,7 @@ import { HTTPException } from 'hono/http-exception'
 import { Hono } from 'hono'
 import { Bindings } from './types/types'
 import html from '../dist-mcp-app/index.html?raw'
-import { getWeightHistory } from './database/operations'
+import { getWeightHistory, getMonthlyAverageWeight } from './database/operations'
 
 const resourceUri = 'ui://kuritterweight'
 
@@ -57,23 +57,12 @@ export const getMcpServer = async (c: Context<{ Bindings: Bindings }>) => {
       _meta: { ui: { resourceUri } },
     },
     async ({ months }) => {
-      const sql = `
-          SELECT
-            strftime('%Y-%m', date) AS month,
-            ROUND(AVG(weight), 1)    AS avg_weight
-          FROM DailyWeights
-          GROUP BY month
-          ORDER BY month DESC
-          ${months ? 'LIMIT ?' : ''}
-        `
-      const { results } = await c.env.DB.prepare(sql)
-        .bind(...(months ? [months] : []))
-        .all()
+      const result = await getMonthlyAverageWeight(db, months)
       return {
         content: [
           {
             type: 'text' as const,
-            text: JSON.stringify(results),
+            text: JSON.stringify(result),
           },
         ],
       }
@@ -93,20 +82,12 @@ export const getMcpServer = async (c: Context<{ Bindings: Bindings }>) => {
       _meta: { ui: { resourceUri } },
     },
     async ({ startDate, endDate }) => {
-      const sql = `
-          SELECT date, weight
-          FROM DailyWeights
-          WHERE date >= ? AND date <= ?
-          ORDER BY date ASC
-        `
-      const { results } = await c.env.DB.prepare(sql)
-        .bind(startDate, endDate + ' 23:59')
-        .all()
+      const result = await getWeightHistory(db, 365, startDate, endDate + ' 23:59')
       return {
         content: [
           {
             type: 'text' as const,
-            text: JSON.stringify(results),
+            text: JSON.stringify(result),
           },
         ],
       }

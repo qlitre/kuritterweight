@@ -62,3 +62,23 @@ export const getWeightHistory = async (
     .all()
   return results.results as Weights[]
 }
+
+export const getMonthlyAverageWeight = async (
+  db: D1Database,
+  months?: number
+): Promise<{ month: string; avg_weight: number }[]> => {
+  const sql = `
+    SELECT
+      strftime('%Y-%m', date) AS month,
+      ROUND(AVG(weight), 1)  AS avg_weight
+    FROM ${tableName}
+    GROUP BY month
+    ORDER BY month DESC
+    ${months ? 'LIMIT ?' : ''}
+  `
+  const { results } = await db
+    .prepare(sql)
+    .bind(...(months ? [months] : []))
+    .all()
+  return results as { month: string; avg_weight: number }[]
+}
