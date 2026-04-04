@@ -15,7 +15,7 @@
     "@cfworker/json-schema": "^4.1.1",
     "@hono/swagger-ui": "^0.6.1",
     "@hono/zod-openapi": "^1.2.4",
-    "@line/bot-sdk": "^10.6.0",
+    "@line/bot-sdk": "^11.0.0",
     "@modelcontextprotocol/ext-apps": "^1.5.0",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "chart.js": "^4.5.1",
