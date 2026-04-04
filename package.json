@@ -17,7 +17,7 @@
     "@hono/zod-openapi": "^1.2.2",
     "@line/bot-sdk": "^10.6.0",
     "@modelcontextprotocol/ext-apps": "^1.1.2",
-    "@modelcontextprotocol/sdk": "^1.27.1",
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "chart.js": "^4.5.1",
     "hono": "^4.12.9",
     "hono-rate-limiter": "^0.5.3",
