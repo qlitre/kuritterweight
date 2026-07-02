@@ -27,7 +27,7 @@
     "@cloudflare/vite-plugin": "^1.39.2",
     "@cloudflare/workers-types": "^4.20260404.1",
     "prettier": "^3.8.1",
-    "vite": "^8.0.10",
+    "vite": "^8.1.2",
     "vite-plugin-singlefile": "^2.3.3",
     "vite-ssr-components": "^0.6.1",
     "wrangler": "^4.97.0"
