@@ -30,6 +30,6 @@
     "vite": "^8.1.5",
     "vite-plugin-singlefile": "^2.3.3",
     "vite-ssr-components": "^0.6.1",
-    "wrangler": "^4.97.0"
+    "wrangler": "^4.115.0"
   }
 }
