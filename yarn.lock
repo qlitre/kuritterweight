@@ -843,10 +843,12 @@
   dependencies:
     "@types/node" "^24.0.0"
 
-"@modelcontextprotocol/ext-apps@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@modelcontextprotocol/ext-apps/-/ext-apps-1.5.0.tgz#43de81703e01cd35441bf0c4b6901eb205cb520c"
-  integrity sha512-q4fut89TOoP2LEPHSGfZErIf1K1xOTTzV+41h/bB2BqKw2gKb0uLKbHusOy1UtbY0puS16zBho/vFp3f5XMVbQ==
+"@modelcontextprotocol/ext-apps@^1.7.5":
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/@modelcontextprotocol/ext-apps/-/ext-apps-1.7.5.tgz#53004fadf7bef79c533e28b10893199c7bf46693"
+  integrity sha512-TjPH2S2y5UEGKhmI6+XGFuqfqOV4ppe1x6DA3txnUaEWkgtA4G5vo14jGKFZmegdkZ1H4QMLyujLvoU1BEdnAg==
+  dependencies:
+    "@standard-schema/spec" "^1.1.0"
 
 "@modelcontextprotocol/sdk@^1.30.0":
   version "1.30.0"
@@ -997,6 +999,11 @@
   version "1.2.14"
   resolved "https://registry.yarnpkg.com/@speed-highlight/core/-/core-1.2.14.tgz#5d7fe87410d2d779bd0b7680f7a706466f363314"
   integrity sha512-G4ewlBNhUtlLvrJTb88d2mdy2KRijzs4UhnlrOSRT4bmjh/IqNElZa3zkrZ+TC47TwtlDWzVLFADljF1Ijp5hA==
+
+"@standard-schema/spec@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@standard-schema/spec/-/spec-1.1.0.tgz#a79b55dbaf8604812f52d140b2c9ab41bc150bb8"
+  integrity sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==
 
 "@tybys/wasm-util@^0.10.3":
   version "0.10.3"
