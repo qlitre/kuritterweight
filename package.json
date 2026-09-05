@@ -21,7 +21,7 @@
     "chart.js": "^4.5.1",
     "hono": "^4.12.32",
     "hono-rate-limiter": "^0.5.3",
-    "zod": "^4.4.3"
+    "zod": "^4.5.4"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.39.2",
